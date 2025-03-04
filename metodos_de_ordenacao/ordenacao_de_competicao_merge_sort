@@ -1,0 +1,145 @@
+import pickle
+
+def main():
+
+    #arquivo com dados de entrada está na pasta
+    with open("entrada_de_dados100000.bin", "rb") as arq:
+
+        dicionario = pickle.load(arq)
+
+    ordenacao(dicionario)
+
+def ordenacao(dicionario):
+    
+    lista_matriculas = []
+
+    for matricula in dicionario:
+        lista_matriculas.append(matricula) 
+
+    tamanho = len(lista_matriculas)
+
+    lista = merge(lista_matriculas, dicionario, tamanho)
+
+    #criação de arquivo txt para a saída de dados
+    with open("lista_ordenada_competicao_merge_sort.txt", "w") as arq:
+
+        for i in range(len(lista)):
+
+            nota = dicionario[lista[i]][1] + dicionario[lista[i]][2] + dicionario[lista[i]][3] + dicionario[lista[i]][4]
+            nome = dicionario[lista[i]][0]
+            arq.write(f"{nome} ")
+
+            if (nota == 40 and dicionario[lista[i]][5] == dicionario[lista[4]][5]) or (nota == 40 and i < 5):
+                nota += 2
+                arq.write(f"{str(nota)} \n")
+
+            else:
+                arq.write(f"{str(nota)} \n")
+    
+def merge(lista, dicionario, tamanho):
+
+    if len(lista) > 1:
+
+        meio = len(lista)// 2
+
+        lesq = lista[:meio]
+        ldir = lista[meio:]
+
+        merge(lesq, dicionario, tamanho)
+        merge(ldir, dicionario, tamanho)
+
+        lista_ordenada = mergesort(lista, lesq, ldir, dicionario)
+
+        if len(lista_ordenada) == tamanho:
+
+            return lista_ordenada
+    
+def mergesort(lista, lesq, ldir, dicionario):
+
+    i = 0
+    j = 0
+    k = 0
+
+    while len(lesq) > i and len(ldir) > j:
+
+        soma1 = dicionario[lesq[i]][1] + dicionario[lesq[i]][2] + dicionario[lesq[i]][3] + dicionario[lesq[i]][4]
+        soma2 = dicionario[ldir[j]][1] + dicionario[ldir[j]][2] + dicionario[ldir[j]][3] + dicionario[ldir[j]][4]
+
+        if soma1 > soma2:
+
+            lista[k] = lesq[i]
+
+            i += 1
+
+        elif soma2 > soma1:
+
+            lista[k] = ldir[j]
+
+            j += 1
+
+        else:
+
+            if dicionario[lesq[i]][5] < dicionario[ldir[j]][5]:
+
+                lista[k] = lesq[i]
+
+                i += 1
+
+            elif dicionario[ldir[j]][5] < dicionario[lesq[i]][5]:
+
+                lista[k] = ldir[j]
+
+                j += 1
+
+            else:
+
+                if dicionario[lesq[i]][0] < dicionario[ldir[j]][0]:
+
+                    lista[k] = lesq[i]
+
+                    i += 1
+
+                elif dicionario[ldir[j]][0] < dicionario[lesq[i]][0]:
+
+                    lista[k] = ldir[j]
+
+                    j += 1
+
+                else:
+
+                    if lesq[i] < ldir[j]:
+
+                        lista[k] = lesq[i]
+
+                        i += 1
+
+                    else:
+
+                        lista[k] = ldir[j]
+
+                        j += 1
+
+        k += 1
+
+        soma1 = 0
+        soma2 = 0
+    
+    while len(lesq) > i:
+
+        lista[k] = lesq[i]
+
+        i += 1
+        k += 1
+
+    while len(ldir) > j:
+
+        lista[k] = ldir[j]
+
+        j += 1
+        k += 1
+
+    return lista
+
+if __name__ == "__main__":
+
+    main()
