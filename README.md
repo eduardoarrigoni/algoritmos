@@ -1,2 +1,2 @@
-# algoritmos
- algoritmos importantes da programação básica
+# Algoritmos
+ Algoritmos importantes da programação básica
